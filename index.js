@@ -23,12 +23,12 @@ let states = {
 
 let currentRoom = "room1";
 
-function e(newState) {
-  let validTransitions = states[currentState].canChangeTo;
-  if (validTransitions.includes(newState)) {
-    currentState = newState;
+function moveToRoom(newRoom) {
+  let validTransitions = states[currentRoom.name].canChangeTo;
+  if (validTransitions.includes(newRoom.name)) {
+    currentRoom = newRoom;
   } else {
-    throw 'Invalid state transition attempted - from ' + currentState + ' to ' + newState;
+    throw 'Invalid state transition attempted - from ' + currentRoom + ' to ' + newRoom;
   }
 }
 
