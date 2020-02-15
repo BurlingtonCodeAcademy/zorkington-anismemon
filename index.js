@@ -140,8 +140,11 @@ async function start() {
       item = "rock"
       dropItem(item)
     }
+    else if (answer === "open door" || answer === "enter 182 main") {
+      console.log("Bzzzzzt!\n~Hint~\nMaybe try a password.")
+    }
     else if (answer === "input password" || answer === "12345") {
-      foyer.locked = false
+      unlock(foyer)
       moveToRoom(foyer)
       console.log(/*chalk.redBright.underline*/(foyer.message))
     }
@@ -195,6 +198,10 @@ async function start() {
       moveToRoom(mainSt3)
       console.log(/*chalk.redBright.underline*/(mainSt3.message))
     }
+    else if (answer === 'go to sleep' || answer === 'sleep') {
+      console.log('Congrats! You found the goal of our game. To sleep... Something we all need!')
+      process.exit()
+    }
 
     else {
       console.log("Sorry, I don't understand '" + answer + "'!")
@@ -234,5 +241,15 @@ function dropItem() {
     currentRoom.inventory.push(roomItem)
     console.log(player.inventory)
     console.log(currentRoom.inventory)
+  }
+}
+
+// allows user to unluck the door to the foyer and any other we choose to have locked
+
+function unlock(room) {
+  if (room.locked = true && answer === "input password" || answer === "12345") {
+    room.locked = false
+    console.log("The door unlocks with an audible click.")
+
   }
 }
