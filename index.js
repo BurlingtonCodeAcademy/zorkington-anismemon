@@ -14,7 +14,7 @@
 
 //--------------------------------------------------------------------------------------------------
 
-const chalk = require('chalk');
+// const chalk = require('chalk'); chalk does not work on my machine - it throws an error
 const readline = require('readline');
 const readlineInterface = readline.createInterface(process.stdin, process.stdout);
 
@@ -44,7 +44,7 @@ function moveToRoom(newRoom) {
   if (validTransitions.includes(newRoom.name)) {
     currentRoom = newRoom;
   } else {
-    console.log('Invalid state transition attempted - from ' + currentRoom.name + ' to ' + newRoom.name + "\nChoose a valid direction.")
+    console.log('Invalid state transition attempted - from ' + currentRoom.name + ' to ' + newRoom.name + "\nPlease choose a valid direction.")
   }
 }
 //--------------------------------------------------------------------------------------------------
@@ -60,14 +60,13 @@ class Room {
   }
 }
 
-const room1 = new Room('182 Main St', "\nYou're at 182 Main St.\nThe home of the Burlington Code Academy!\n\nAhead of you is a door.\nDown the street is Mr Mikes and Muddy Waters.\nOn the door is a hand written sign", ["rock", "coin", "chewed gum"], true)
-const room2 = new Room('Foyer', "\nYou're in the foyer.\nThe foyer is a foyer.\nThere are stairs ahead of you.\nThe door to 182 Main St. is behind you.\nIt is not locked.", "", true)
-const room3 = new Room('Classroom', "\nYou're in the Classroom.\nBob, the instructor, is not currently here.\nHe's probably either making tea or skiing.\nYou could wait for him, but it might be a long wait.\nYou can go back down stairs, or you can stay here.", "")
-const room4 = new Room("Muddy Waters", "\nYou're inside Muddy Waters.\nIt's kind of dark since they keep the lights low.\nIt adds atmosphere.", "")
-const room5 = new Room("Mr Mikes", "\nYou're inside Mr Mikes.\nSmell the lovely odor of rancid, overcooked oil!\nBeware: if you stay here for more than 2 minutes,\nyour clothes will permanently smell like pizza grease.\nThere is something written on the specials board.", "")
-
-const room7 = new Room('MainSt2', "\nYou're in front of Muddy Waters, one of Burlington's finest cafes.\nThey serve many types of coffee, tea and pastries.\nThe bathrooms also do not require a key!", "")
-const room8 = new Room('MainSt3', "\nYou're in front of Mr. Mikes, an ok pizza place that is mostly fequented by students.\nYou can get pizza here if you realllllly want,\nbut I wouldn't recommend it.\nDown the street is 182 main st and Muddy Waters.", "")
+const main182 = new Room('182 Main St', "\nYou're at 182 Main St.\nThe home of the Burlington Code Academy!\n\nDown the street are Mr. Mikes and Muddy Waters.\nAhead of you is a door.\nOn the door is a hand written sign.\n", ["rock", "coin", "chewed gum"], true)
+const foyer = new Room('Foyer', "\nYou're in the foyer.\nThe foyer is a foyer.\nThere are stairs ahead of you.\nThe door to 182 Main St. is behind you.\nIt is not locked.", "", true)
+const classroom = new Room('Classroom', "\nYou're in the Classroom.\nBob, the instructor, is not currently here.\nHe's probably either making tea or skiing.\nYou could wait for him, but it might be a long wait.\nYou can go back down stairs, or you can stay here.", "")
+const muddyWaters = new Room("Muddy Waters", "\nYou're inside Muddy Waters.\nIt's kind of dark since they keep the lights low.\nIt adds atmosphere.", "")
+const mrMikes = new Room("Mr Mikes", "\nYou're inside Mr Mikes.\nSmell the lovely odor of rancid, overcooked oil!\nBeware: if you stay here for more than 2 minutes,\nyour clothes will permanently smell like pizza grease.\nThere is something written on the specials board.", "")
+const mainSt2 = new Room('MainSt2', "\nYou're in front of Muddy Waters, one of Burlington's finest cafes.\nThey serve many types of coffee, tea and pastries.\nThe bathrooms also do not require a key!", "")
+const mainSt3 = new Room('MainSt3', "\nYou're in front of Mr. Mikes, an ok pizza place that is mostly fequented by students.\nYou can get pizza here if you realllllly want,\nbut I wouldn't recommend it.\nDown the street are the Muddy Waters and the Burlington Code Academy.", "")
 
 
 //--------------------------------------------------------------------------------------------------
@@ -79,11 +78,11 @@ const paper = {}
 //--------------------------------------------------------------------------------------------------
 // Main Function \\
 
-let currentRoom = room1;
+let currentRoom = main182;
 let answer = ""
-
+let playerName = ""
 let player = {
-  name: "",
+  name: playerName,
   health: 100,
   inventory: [],
   status: function () {
@@ -91,7 +90,7 @@ let player = {
       return ("Seems like you're getting kinda tired.\nMaybe grab some coffee?")
     }
     else if (this.health <= 90) {
-      return ("Looks like you're getting kinda hungry. \nMaybe grab some food.")
+      return ("Looks like you're getting kinda hungry.\nMaybe grab some food?")
     }
     else {
       return " "
@@ -101,11 +100,20 @@ let player = {
 start();
 
 async function start() {
-  player.name = await ask("Before we begin, what is your name?")
-  const welcomeMessage = "Good evening fellow student! You're about to tour around our lovely campus.\nSome helpful information along your way:\nTyping i will bring up your inventory.\nTyping h will bring up your health.\nRemember to read the messages closely."
+
+  // this is the set up to the game: 
+
+  playerName = await ask("Before we begin, what is your name? ")
+  const welcomeMessage = ("Good evening, " + playerName + ". You're about to tour lovely downtown Burlington.")
   console.log(welcomeMessage)
-  console.log(room1.message);
-  console.log('There is a rock on the ground')
+  infoResponse = await ask("Hit enter for some useful information.")
+  console.log("\nKeep these tips in mind as you play:\n\n     Typing i will bring up your inventory.\n     Typing h will bring up your health.\n     Typing r will tell you which room you're in.\n\nAnd be sure to read the messages carefully!\n")
+  beginGame = await ask("Ready? Just hit enter to begin. ")
+  console.log(main182.message);
+  console.log('There is a shiny rock on the ground.')
+  console.log(player)
+
+  // this loop contains the entire game logic: 
 
   while (answer !== 'exit') {
     answer = (await ask('>_')).trim().toLowerCase()
@@ -113,7 +121,7 @@ async function start() {
     console.log(player.status())
 
     if (answer === 'read sign') {
-      console.log(chalk.redBright.underline(sign.message))
+      console.log(/*chalk.redBright.underline*/(sign.message))
     }
     else if (answer === 'h') {
       console.log(player.health)
@@ -121,43 +129,43 @@ async function start() {
     else if (answer === 'i') {
       console.log("You are carrying:\n" + player.inventory)
     }
-    else if (answer === 'r'){
+    else if (answer === 'r') {
       console.log(currentRoom)
     }
-    else if (answer === "pick up rock") {
-      let rock = room1.inventory.pop()
-
-      player.inventory.push(rock)
-
-      console.log(player.inventory)
-      console.log(room1.inventory)
+    else if (answer === "pick up rock" || answer === "take rock" || answer === "grab rock") {
+      item = "rock"
+      takeItem(item)
     }
-    else if (answer === "input password") {
-      room2.locked = false
-      moveToRoom(room2)
-      console.log(chalk.redBright.underline(room2.message))
+    else if (answer === "drop rock" || answer === "leave rock") {
+      item = "rock"
+      dropItem(item)
+    }
+    else if (answer === "input password" || answer === "12345") {
+      foyer.locked = false
+      moveToRoom(foyer)
+      console.log(/*chalk.redBright.underline*/(foyer.message))
     }
     else if (answer === "go up stairs") {
-      moveToRoom(room3)
-      console.log(chalk.redBright.underline(room3.message))
+      moveToRoom(classroom)
+      console.log(/*chalk.redBright.underline*/(classroom.message))
     }
     else if (answer === "go down stairs") {
-      moveToRoom(room2)
-      console.log(chalk.redBright.underline(room2.message))
+      moveToRoom(foyer)
+      console.log(/*chalk.redBright.underline*/(foyer.message))
     }
     else if (answer === "go to 182 main st") {
-      moveToRoom(room1)
-      console.log(chalk.redBright.underline(room1.message))
+      moveToRoom(main182)
+      console.log(/*chalk.redBright.underline*/(main182.message))
     }
     else if (answer === "go to muddy waters") {
-      moveToRoom(room7)
-      console.log(chalk.redBright.underline(room7.message))
+      moveToRoom(mainSt2)
+      console.log(/*chalk.redBright.underline*/(mainSt2.message))
     }
     else if (answer === "enter muddy waters") {
-      moveToRoom(room4)
-      console.log(chalk.redBright.underline(room4.message))
-      let coffeeQuestion = await ask("Would you like to buy a coffee?\n>_")
-      if (coffeeQuestion === "yes") {
+      moveToRoom(muddyWaters)
+      console.log(/*chalk.redBright.underline*/(muddyWaters.message))
+      let coffeeAnswer = await ask("Would you like to get a coffee?\n>_")
+      if (coffeeAnswer === "yes") {
         player.health = player.health + 5
         console.log("What next?")
       } else {
@@ -165,18 +173,18 @@ async function start() {
       }
     }
     else if (answer === "exit muddy waters") {
-      moveToRoom(room7)
-      console.log(chalk.redBright.underline(room7.message))
+      moveToRoom(mainSt2)
+      console.log(/*chalk.redBright.underline*/(mainSt2.message))
     }
     else if (answer === "go to mr mikes" || answer === "go to mr. mikes") {
-      moveToRoom(room8)
-      console.log(chalk.redBright.underline(room8.message))
+      moveToRoom(mainSt3)
+      console.log(/*chalk.redBright.underline*/(mainSt3.message))
     }
     else if (answer === "enter mr mikes" || answer === "enter mr. mikes") {
-      moveToRoom(room5)
-      console.log(chalk.redBright.underline(room8.message))
-      let pizzaQuestion = await ask("Would you like to buy some pizza?\n>_")
-      if (pizzaQuestion === "yes") {
+      moveToRoom(mrMikes)
+      console.log(/*chalk.redBright.underline*/(mainSt3.message))
+      let pizzaAnswer = await ask("Would you like to get some pizza?\n>_")
+      if (pizzaAnswer === "yes") {
         player.health = player.health + 10
         console.log("What next?")
       } else {
@@ -184,12 +192,12 @@ async function start() {
       }
     }
     else if (answer === "exit mr mikes" || answer === "exit mr. mikes" || answer === "leave mr mikes" || answer === "leave mr. mikes") {
-      moveToRoom(room8)
-      console.log(chalk.redBright.underline(room8.message))
+      moveToRoom(mainSt3)
+      console.log(/*chalk.redBright.underline*/(mainSt3.message))
     }
-  
+
     else {
-      console.log("Sorry, I dont understand " + answer + "!")
+      console.log("Sorry, I don't understand '" + answer + "'!")
     }
   }
   process.exit()
@@ -197,3 +205,34 @@ async function start() {
 //--------------------------------------------------------------------------------------------------
 // In Game Functions \\
 
+// takeItem function to allow player to pick up items from rooms and add to own inventory; checks if item is actually in the current room's inventory
+
+function takeItem() {
+  if (!currentRoom.inventory.includes(item)) {
+    console.log("The item you seek cannot be found.")
+  } else {
+    let n = currentRoom.inventory.indexOf(item)
+    console.log(n)
+    let arrayItem = currentRoom.inventory.splice(n, 1)
+    let roomItem = arrayItem.join()
+    player.inventory.push(roomItem)
+    console.log(player.inventory)
+    console.log(currentRoom.inventory)
+  }
+}
+
+// dropItem function to allow player to drop an item from their inventory; item is then added to current room inventory; checks if the item is actually in the player's inventory
+
+function dropItem() {
+  if (!player.inventory.includes(item)) {
+    console.log("You cannot leave behind what you do not have.")
+  } else {
+    let n = player.inventory.indexOf(item)
+    console.log(n)
+    let arrayItem = player.inventory.splice(n, 1)
+    let roomItem = arrayItem.join()
+    currentRoom.inventory.push(roomItem)
+    console.log(player.inventory)
+    console.log(currentRoom.inventory)
+  }
+}
