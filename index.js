@@ -81,6 +81,7 @@ const paper = {}
 let currentRoom = main182;
 let answer = ""
 let playerName = ""
+let item = ""
 let player = {
   name: playerName,
   health: 100,
