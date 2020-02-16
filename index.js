@@ -133,14 +133,12 @@ async function start() {
     else if (answer === 'r') {
       console.log(currentRoom)
     }
-    else if (answer === "pick up rock" || answer === "take rock" || answer === "grab rock") {
-      item = "rock"
-      takeItem(item)
-    }
-    else if (answer === "drop rock" || answer === "leave rock") {
-      item = "rock"
-      dropItem(item)
-    }
+    else if (answer.split(" ")[0] === 'take' || answer.split(" ")[0] === 'pick' || answer.split(" ")[0] === 'grab') {
+      takeItem()
+  }
+    else if (answer.split(" ")[0] === 'drop' || answer.split(" ")[0] === 'leave') {
+      dropItem()
+  }
     else if (answer === "open door" || answer === "enter 182 main") {
       console.log("Bzzzzzt!\n~Hint~\nMaybe try a password.")
     }
@@ -216,32 +214,50 @@ async function start() {
 // takeItem function to allow player to pick up items from rooms and add to own inventory; checks if item is actually in the current room's inventory
 
 function takeItem() {
-  if (!currentRoom.inventory.includes(item)) {
-    console.log("The item you seek cannot be found.")
-  } else {
-    let n = currentRoom.inventory.indexOf(item)
-    console.log(n)
-    let arrayItem = currentRoom.inventory.splice(n, 1)
-    let roomItem = arrayItem.join()
-    player.inventory.push(roomItem)
-    console.log(player.inventory)
-    console.log(currentRoom.inventory)
+  let tempArray = []
+  for (let item of answer.split(" ")) {
+
+    if (currentRoom.inventory.includes(item)) {
+      let n = currentRoom.inventory.indexOf(item)
+      console.log(n)
+      let arrayItem = currentRoom.inventory.splice(n, 1)
+      let roomItem = arrayItem.join()
+      player.inventory.push(roomItem)
+      console.log(player.inventory)
+      console.log(currentRoom.inventory)
+      tempArray.push(item)
+      console.log(tempArray)
+
+    } else if (!currentRoom.inventory.includes(item)) {
+      tempArray = tempArray
+    }
+  } if (tempArray.length === 0) {
+    console.log("What you seek cannot be found.")
   }
 }
 
 // dropItem function to allow player to drop an item from their inventory; item is then added to current room inventory; checks if the item is actually in the player's inventory
 
 function dropItem() {
-  if (!player.inventory.includes(item)) {
+  let tempArray = []
+  for (let item of answer.split(" ")) {
+
+    if (player.inventory.includes(item)) {
+      let n = player.inventory.indexOf(item)
+      console.log(n)
+      let arrayItem = player.inventory.splice(n, 1)
+      let playerItem = arrayItem.join()
+      currentRoom.inventory.push(playerItem)
+      console.log(player.inventory)
+      console.log(currentRoom.inventory)
+      tempArray.push(item)
+      console.log(tempArray)
+
+    } else if (!player.inventory.includes(item)) {
+      tempArray = tempArray
+    }
+  } if (tempArray.length === 0) {
     console.log("You cannot leave behind what you do not have.")
-  } else {
-    let n = player.inventory.indexOf(item)
-    console.log(n)
-    let arrayItem = player.inventory.splice(n, 1)
-    let roomItem = arrayItem.join()
-    currentRoom.inventory.push(roomItem)
-    console.log(player.inventory)
-    console.log(currentRoom.inventory)
   }
 }
 
