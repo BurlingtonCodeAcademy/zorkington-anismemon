@@ -288,12 +288,13 @@ function takeItem() {
   for (let item of answer.split(" ")) {
 
     if (currentRoom.inventory.includes(item)) {
-      let n = currentRoom.inventory.indexOf(item)
-      let arrayItem = currentRoom.inventory.splice(n, 1)
-      let roomItem = arrayItem.join()
+      let indexOfItem = currentRoom.inventory.indexOf(item)
+      let arrayItem = currentRoom.inventory.splice(indexOfItem, 1)  
+      let roomItem = arrayItem.join()   
       player.inventory.push(roomItem)
       tempArray.push(item)
       console.log(capitalize(item) + " added to your inventory.")
+      console.log(player.inventory)
 
     } tempArray = tempArray
 
@@ -309,8 +310,8 @@ function dropItem() {
   for (let item of answer.split(" ")) {
 
     if (player.inventory.includes(item)) {
-      let n = player.inventory.indexOf(item)
-      let arrayItem = player.inventory.splice(n, 1)
+      let indexOfItem = player.inventory.indexOf(item)
+      let arrayItem = player.inventory.splice(indexOfItem, 1)      
       let playerItem = arrayItem.join()
       currentRoom.inventory.push(playerItem)
       tempArray.push(item)
@@ -330,8 +331,8 @@ function giveBob() {
   for (let item of answer.split(" ")) {
 
     if (player.inventory.includes(item)) {
-      let n = player.inventory.indexOf(item)
-      let arrayItem = player.inventory.splice(n, 1)
+      let indexOfItem = player.inventory.indexOf(item)
+      let arrayItem = player.inventory.splice(indexOfItem, 1)      
       let playerItem = arrayItem.join()
       bob.inventory.push(playerItem)
       tempArray.push(item)
