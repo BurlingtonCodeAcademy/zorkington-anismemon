@@ -73,10 +73,10 @@ let bob = {
   health: 25,
   inventory: [""],
   tiredMessage: "hsdbvkfdbdfjbnfkjbnv",
-  rejuvinatedMessage: "Hi " + playerName + "Thanks for the tea! Now we can begin class! You should go sit and get ready for class.",
+  rejuvenateMessage: "Hi " + playerName + "Thanks for the tea! Now we can begin class! You should go sit and get ready for class.",
   status: function () {
-    if (this.invetory = ["tea"]) {
-      return this.rejuvinatedMessage
+    if (this.invetory = ["tea"] && player.inventory.includes("tea")) {
+      return this.rejuvenateMessage
     }
     else {
       return " "
@@ -89,188 +89,194 @@ let bob = {
 // Our player object
 
 let player = {
-    name: playerName,
-    health: 100,
-    inventory: [],
-    status: function () {
-      if (this.health <= 80) {
-        return ("Seems like you're getting kinda tired.\nMaybe grab some coffee?")
-      }
-      else if (this.health <= 90) {
-        return ("Looks like you're getting kinda hungry.\nMaybe grab some food?")
-      }
-      else {
-        return " "
-      }
+  name: playerName,
+  health: 100,
+  inventory: [],
+  status: function () {
+    if (this.health <= 80) {
+      return ("Seems like you're getting kinda tired.\nMaybe grab some coffee?")
+    }
+    else if (this.health <= 90) {
+      return ("Looks like you're getting kinda hungry.\nMaybe grab some food?")
+    }
+    else {
+      return " "
     }
   }
+}
 start();
 
 async function start() {
 
-    // this is the set up to the game: 
+  // this is the set up to the game: 
 
-    playerName = await ask("Before we begin, what is your name? ")
+  playerName = await ask("Before we begin, what is your name? ")
   const welcomeMessage = ("Good evening, " + playerName + ". You're about to tour lovely downtown Burlington.")
   console.log(welcomeMessage)
-infoResponse = await ask("Hit enter for some useful information.")
-console.log("\nKeep these tips in mind as you play:\n\n     Typing i will bring up your inventory.\n     Typing h will bring up your health.\n     Typing r will tell you which room you're in.\n\nAnd be sure to read the messages carefully!\n")
-beginGame = await ask("Ready? Just hit enter to begin. ")
-console.log(main182.message);
-console.log('There is a shiny rock on the ground.')
+  infoResponse = await ask("Hit enter for some useful information.")
+  console.log("\nKeep these tips in mind as you play:\n\n     Typing i will bring up your inventory.\n     Typing h will bring up your health.\n     Typing r will tell you which room you're in.\n\nAnd be sure to read the messages carefully!\n")
+  beginGame = await ask("Ready? Just hit enter to begin. ")
+  console.log(main182.message);
+  console.log('There is a shiny rock on the ground.')
 
 
-// this loop contains the entire game logic: 
-// Most statements are pretty explanatory as to what they do.
+  // this loop contains the entire game logic: 
+  // Most statements are pretty explanatory as to what they do.
 
-while (answer !== 'exit') {
-  answer = (await ask('>_')).trim().toLowerCase()
-  player.health--
-  console.log(player.status())
+  while (answer !== 'exit') {
+    answer = (await ask('>_')).trim().toLowerCase()
+    player.health--
+    console.log(player.status())
+    let arrayAnswer = answer.split(" ")[0]
 
-  if (answer === 'read sign') {
-    console.log(sign.message)
-  }
-  else if (answer === 'h') {
-    console.log(player.health)
-  }
-  else if (answer === 'i') {
-    console.log("You are carrying:\n" + player.inventory)
-  }
-  else if (answer === 'r') {
-    console.log(currentRoom)
-  }
+    if (answer === 'read sign') {
+      console.log(sign.message)
+    }
+    else if (answer === 'h') {
+      console.log(player.health)
+    }
+    else if (answer === 'i') {
+      console.log("You are carrying:\n" + player.inventory)
+    }
+    else if (answer === 'r') {
+      console.log(currentRoom)
+    }
 
-  //--------------------------------------------------------------------------------------------------
-  // Drop & Add Logic \\
+    //--------------------------------------------------------------------------------------------------
+    // Drop & Add Logic \\
 
-  else if (answer.split(" ")[0] === 'take' || answer.split(" ")[0] === 'pick' || answer.split(" ")[0] === 'grab' || answer.split(" ")[0] === 'get') {
-    takeItem()
-  }
-  else if (answer.split(" ")[0] === 'drop' || answer.split(" ")[0] === 'leave') {
-    dropItem()
-  }
+    else if (arrayAnswer === 'take' || arrayAnswer === 'pick' || arrayAnswer === 'grab' || arrayAnswer === 'get') {
+      takeItem()
+    }
+    else if (arrayAnswer === 'drop' || arrayAnswer === 'leave') {
+      dropItem()
+    }
 
-  //--------------------------------------------------------------------------------------------------
-  //Foyer & 182 Main Logic \\
+    //--------------------------------------------------------------------------------------------------
+    //Foyer & 182 Main Logic \\
 
-  else if (answer === "open door" || answer === "enter 182 main") {
-    console.log("Bzzzzzt!\n~Hint~\nMaybe try a password.")
-  }
-  else if (answer === "input password" || answer === "12345") {
-    unlock(foyer)
-    moveToRoom(foyer)
-    console.log(foyer.message)
-  }
-  else if (answer === "go up stairs") {
-    moveToRoom(classroom)
-    console.log(classroom.message)
-  }
-  else if (answer === "go down stairs") {
-    moveToRoom(foyer)
-    console.log(foyer.message)
-  }
-  else if (answer === "go to 182 main st" || answer === "exit foyer" || answer === "go to 182") {
-    moveToRoom(main182)
-    console.log(main182.message)
-  }
+    else if (answer === "open door" || answer === "enter 182 main") {
+      console.log("Bzzzzzt!\n~Hint~\nMaybe try a password.")
+    }
+    else if (answer === "input password" || answer === "12345") {
+      unlock(foyer)
+      moveToRoom(foyer)
+      console.log(foyer.message)
+    }
+    else if (answer === "go up stairs") {
+      moveToRoom(classroom)
+      console.log(classroom.message)
+    }
+    else if (answer === "go down stairs") {
+      moveToRoom(foyer)
+      console.log(foyer.message)
+    }
+    else if (answer === "go to 182 main st" || answer === "exit foyer" || answer === "go to 182") {
+      moveToRoom(main182)
+      console.log(main182.message)
+    }
 
-  //--------------------------------------------------------------------------------------------------
-  // Muddy Waters Logic \\
+    //--------------------------------------------------------------------------------------------------
+    // Muddy Waters Logic \\
 
-  else if (answer === "go to muddy waters" || answer === "go to muddy") {
-    moveToRoom(mainSt2)
-    console.log(mainSt2.message)
-  }
-  else if (answer === "enter muddy waters" || answer === "enter muddy") {
-    moveToRoom(muddyWaters)
-    console.log(muddyWaters.message)
-    let coffeeAnswer = await ask("Would you like to get a coffee?\n>_")
-    if (coffeeAnswer === "yes") {
-      player.health = player.health + 5
-      console.log("That's sooooome java!")
-    } else {
-      console.log("What next?")
+    else if (answer === "go to muddy waters" || answer === "go to muddy") {
+      moveToRoom(mainSt2)
+      console.log(mainSt2.message)
+    }
+    else if (answer === "enter muddy waters" || answer === "enter muddy") {
+      moveToRoom(muddyWaters)
+      console.log(muddyWaters.message)
+      let coffeeAnswer = await ask("Would you like to get a coffee?\n>_")
+      if (coffeeAnswer === "yes") {
+        player.health = player.health + 5
+        console.log("That's sooooome java!")
+      } else {
+        console.log("What next?")
+      }
+    }
+    else if (answer === "read paper" || answer === "open paper" || answer === "read 7 days" || answer === "open 7 days" || answer === "read 7days" || answer === "open 7days") {
+      console.log(paper.message)
+      console.log("In your excitement at the headline, you accidentally run your hand on some gum stuck under your chair.")
+      player.health = player.health + 2
+    }
+    else if (answer === "remove gum" || answer === "rub off gum" || answer === "try to remove gum" || answer === "wipe off gum" || answer === "clean hands" || answer === "clean gum" || answer === "clean off gum") {
+      console.log("That's some tenacious gum. You'll need to wash it off in the bathroom.\nAnd remember: you don't need a key!")
+    }
+
+    else if (answer === "drink coffee") {
+      console.log("That's better!")
+    }
+    else if (answer === "exit muddy waters" || answer === "exit muddy") {
+      moveToRoom(mainSt2)
+      console.log(mainSt2.message)
+    }
+
+    //--------------------------------------------------------------------------------------------------
+    // Bathroom logic for Muddy Waters and Mr. Mikes \\
+
+    else if (answer === "use bathroom" && (currentRoom === muddyWaters || currentRoom === mrMikes) || answer === "go to the bathroom" && (currentRoom === muddyWaters || currentRoom === mrMikes) || answer === "go to bathroom" && (currentRoom === muddyWaters || currentRoom === mrMikes)) {
+      console.log("That's better! But remember: All employees must wash hands before returning to work...\nand so should you!")
+    }
+    else if (answer === "wash hands") {
+      console.log("Good hygiene is essential. Who wants to catch the corona virus?")
+    }
+    else if (answer === "use bathroom" && (currentRoom !== muddyWaters || currentRoom !== mrMikes) || answer === "go to the bathroom" && (currentRoom !== muddyWaters || currentRoom !== mrMikes)) {
+      console.log("Hey! It may be urgent, but please try to find a place that actually has a bathroom!")
+    }
+
+    //--------------------------------------------------------------------------------------------------
+    // Mr Mikes Logic \\
+
+    else if (answer === "go to mr mikes" || answer === "go to mr. mikes") {
+      moveToRoom(mainSt3)
+      console.log(mainSt3.message)
+    }
+    else if (answer === "enter mr mikes" || answer === "enter mr. mikes") {
+      moveToRoom(mrMikes)
+      console.log(mrMikes.message)
+    }
+    else if (answer === "read specials board" || answer === "read specials") {
+      console.log(mikesSpecials.message)
+      let pizzaAnswer = await ask("Would you like to get some pizza?\n>_")
+      if (pizzaAnswer === "yes") {
+        player.health = player.health + 10
+        console.log("I'd recommend stocking up on napkins.")
+      } else {
+        console.log("Okay, so What next?")
+      }
+    }
+    else if (answer === "exit mr mikes" || answer === "exit mr. mikes" || answer === "leave mr mikes" || answer === "leave mr. mikes") {
+      moveToRoom(mainSt3)
+      console.log(mainSt3.message)
+    }
+
+    //--------------------------------------------------------------------------------------------------
+    // Classroom logic \\
+
+    else if (answer === "sit down" || answer === "sit") {
+      player.health = player.health - 10
+      console.log("Wow, that was a long class!")
+    }
+    else if (answer === "talk to bob") {
+      (console.log(bob.tiredMessage))
+    }
+    else if (arrayAnswer === 'give' && answer.split(" ")[1] === "bob") {
+      giveBob()
+      console.log(bob.status())
+    }
+    else if (answer === 'go to sleep' || answer === 'sleep') {
+      console.log('Congrats! You found the goal of our game. To sleep... Something we all need!')
+      process.exit()
+    }
+    else if (answer === 'exit class') {
+      moveToRoom(foyer)
+      console.log(foyer.message)
+    }
+    else {
+      console.log("Sorry, I don't understand '" + answer + "'!")
     }
   }
-  else if (answer === "read paper" || answer === "open paper" || answer === "read 7 days" || answer === "open 7 days" || answer === "read 7days" || answer === "open 7days") {
-    console.log(paper.message)
-    console.log("In your excitement at the headline, you accidentally run your hand on some gum stuck under your chair.")
-    player.health = player.health + 2
-  }
-  else if (answer === "remove gum" || answer === "rub off gum" || answer === "try to remove gum" || answer === "wipe off gum" || answer === "clean hands" || answer === "clean gum" || answer === "clean off gum") {
-    console.log("That's some tenacious gum. You'll need to wash it off in the bathroom.\nAnd remember: you don't need a key!")
-  }
-  else if (answer === "use bathroom" && (currentRoom === muddyWaters || currentRoom === mrMikes) || answer === "go to the bathroom" && (currentRoom === muddyWaters || currentRoom === mrMikes) || answer === "go to bathroom" && (currentRoom === muddyWaters || currentRoom === mrMikes)) {
-    console.log("That's better! But remember: All employees must wash hands before returning to work...\nand so should you!")
-  }
-  else if (answer === "wash hands") {
-    console.log("Good hygiene is essential. Who wants to catch the corona virus?")
-  }
-  else if (answer === "use bathroom" && (currentRoom !== muddyWaters || currentRoom !== mrMikes) || answer === "go to the bathroom" && (currentRoom !== muddyWaters || currentRoom !== mrMikes)) {
-    console.log("Hey! It may be urgent, but please try to find a place that actually has a bathroom!")
-  }
-  else if (answer === "drink coffee") {
-    console.log("That's better!")
-  }
-  else if (answer === "exit muddy waters" || answer === "exit muddy") {
-    moveToRoom(mainSt2)
-    console.log(mainSt2.message)
-  }
-
-  //--------------------------------------------------------------------------------------------------
-  // Mr Mikes Logic \\
-
-  else if (answer === "go to mr mikes" || answer === "go to mr. mikes") {
-    moveToRoom(mainSt3)
-    console.log(mainSt3.message)
-  }
-  else if (answer === "enter mr mikes" || answer === "enter mr. mikes") {
-    moveToRoom(mrMikes)
-    console.log(mrMikes.message)
-  }
-  else if (answer === "read specials board" || answer === "read specials") {
-    console.log(mikesSpecials.message)
-    let pizzaAnswer = await ask("Would you like to get some pizza?\n>_")
-    if (pizzaAnswer === "yes") {
-      player.health = player.health + 10
-      console.log("I'd recommend stocking up on napkins.")
-    } else {
-      console.log("Okay, so What next?")
-    }
-  }
-  else if (answer === "exit mr mikes" || answer === "exit mr. mikes" || answer === "leave mr mikes" || answer === "leave mr. mikes") {
-    moveToRoom(mainSt3)
-    console.log(mainSt3.message)
-  }
-
-  //--------------------------------------------------------------------------------------------------
-  // Classroom logic \\
-
-  else if (answer === "take a seat" || answer === "sit") {
-    player.health = player.health - 10
-    console.log("Wow that was a long class!")
-  }
-  else if (answer === "talk to bob") {
-    (console.log(bob.tiredMessage))
-  }
-  else if (answer.split(" ")[0] === 'give') {
-    giveBob()
-    console.log(bob.status())
-  }
-  else if (answer === 'go to sleep' || answer === 'sleep') {
-    console.log('Congrats! You found the goal of our game. To sleep... Something we all need!')
-    process.exit()
-  }
-  else if (answer === 'exit class'){
-    moveToRoom(foyer)
-    console.log(foyer.message)
-  }
-  else {
-    console.log("Sorry, I don't understand '" + answer + "'!")
-  }
-}
-process.exit()
+  process.exit()
 }
 //--------------------------------------------------------------------------------------------------
 // In Game Functions \\
@@ -287,11 +293,10 @@ function takeItem() {
       let roomItem = arrayItem.join()
       player.inventory.push(roomItem)
       tempArray.push(item)
-      console.log(item[0].toUpperCase() + item.slice(1).toLowerCase() + " added to your inventory.")
+      console.log(capitalize(item) + " added to your inventory.")
 
-    } else if (!currentRoom.inventory.includes(item)) {
-      tempArray = tempArray
-    }
+    } tempArray = tempArray
+
   } if (tempArray.length === 0) {
     console.log("What you seek cannot be found.")
   }
@@ -309,11 +314,10 @@ function dropItem() {
       let playerItem = arrayItem.join()
       currentRoom.inventory.push(playerItem)
       tempArray.push(item)
-      console.log(item[0].toUpperCase() + item.slice(1).toLowerCase() + ' removed from your inventory.')
+      console.log(capitalize(item) + ' removed from your inventory.')
 
-    } else if (!player.inventory.includes(item)) {
-      tempArray = tempArray
-    }
+    } tempArray = tempArray
+
   } if (tempArray.length === 0) {
     console.log("You cannot leave behind what you do not have.")
   }
@@ -331,11 +335,10 @@ function giveBob() {
       let playerItem = arrayItem.join()
       bob.inventory.push(playerItem)
       tempArray.push(item)
-      console.log(item[0].toUpperCase() + item.slice(1).toLowerCase() + ' removed from your inventory.')
+      console.log(capitalize(item) + ' removed from your inventory.')
 
-    } else if (!player.inventory.includes(item)) {
-      tempArray = tempArray
-    }
+    } tempArray = tempArray
+    
   } if (tempArray.length === 0) {
     console.log("You cannot give what you do not have.")
   }
@@ -350,4 +353,11 @@ function unlock(room) {
     console.log("The door unlocks with an audible click.")
 
   }
+}
+
+// capitalize function to capitalize the first letter of words (only used here for taking / adding)
+
+function capitalize(string) {
+  string = string.toString().trim()
+  return string[0].toUpperCase() + string.slice(1).toLowerCase()
 }
